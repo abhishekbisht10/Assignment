@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            padding: 40px;
+            background-color: #f3f3f3;
+        }
+        .heading {
+            color: #191919;
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid rgb(103,182,172);
+        }   
+        #card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }         
+        .card {
+            width: 230px;
+            height: 270px;
+            margin: 18px 16px;
+            cursor: pointer;
+            overflow: hidden;
+            user-select: none;
+            border-radius: 16px;
+            background-color: #ffffff;
+            transition: ease-in-out 0.25s;
+            box-shadow: 0px 1px 15px 7px rgba(0,0,0,0.1);
+        }
+        .card:hover {
+            transform: scale(1.05);
+            background-color: rgb(103,182,172);
+        }
+        .cardImg {
+            height: 220px;
+            width:  100%;
+            object-fit: cover;
+        }
+        .cardTitle {
+            color: #191919;
+            margin-top: 10px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        .card:hover .cardTitle {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="heading">Our Team</div>
+    <div id="card-container"></div>
+
+    <script>
+        // Fetch JSON data
+        async function fetchData() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching images:', error);
+            }
+        }
+
+        // Load cards
+        async function loadCards() {
+            const cardContainer = document.getElementById('card-container');
+            const users = await fetchData();
+      
+            users.forEach(user => {
+                // Picture
+                const img = document.createElement('img');
+                img.src = user.image;
+                img.alt = 'Image';
+                img.className = 'cardImg';
+                // Title
+                const title = document.createElement('div');
+                title.className = 'cardTitle';
+                title.innerText = user.name;
+                // Card
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.appendChild(img);
+                card.appendChild(title);
+                // Add to container
+                cardContainer.appendChild(card);
+            });
+        }
+
+        // page is loaded
+        window.onload = loadCards;
+    </script>
+</body>
+</html>
